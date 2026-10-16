@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestión de proyectos</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/">Proyectos</a>
+  <% if (user) { %>
+    <form method="post" action="/logout" class="inline">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <span class="muted"><%= user.name %></span>
+      <button class="btn btn-ghost">Salir</button>
+    </form>
+  <% } %>
+</header>
+<main class="container">

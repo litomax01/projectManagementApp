@@ -1,0 +1,81 @@
+<%- include('../partials/header') %>
+<p><a href="/">&larr; Proyectos</a></p>
+<h1><%= project.name %></h1>
+<p class="muted"><%= project.description %></p>
+<progress max="100" value="<%= progress %>"></progress> <small class="muted"><%= progress %>% completado</small>
+<% if (error) { %><p class="alert"><%= error %></p><% } %>
+
+<div class="board">
+  <% Object.entries(STATUSES).forEach(([key, label]) => { %>
+    <section class="column">
+      <h2><%= label %> <span class="badge"><%= tasks.filter(t => t.status === key).length %></span></h2>
+      <% tasks.filter(t => t.status === key).forEach(t => { %>
+        <article class="card task">
+          <a href="/projects/<%= project.id %>/tasks/<%= t.id %>"><strong><%= t.title %></strong></a>
+          <small class="muted">
+            <%= t.assignee_name || 'Sin asignar' %><%= t.due_date ? ' · ' + t.due_date : '' %><%= t.comment_count ? ' · ' + t.comment_count + ' 💬' : '' %>
+          </small>
+          <form method="post" action="/projects/<%= project.id %>/tasks/<%= t.id %>/status" class="inline">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <% Object.entries(STATUSES).filter(([k]) => k !== key).forEach(([k, l]) => { %>
+              <button class="btn btn-small" name="status" value="<%= k %>">→ <%= l %></button>
+            <% }) %>
+          </form>
+        </article>
+      <% }) %>
+    </section>
+  <% }) %>
+</div>
+
+<div class="grid-2">
+  <section>
+    <h2>Nueva tarea</h2>
+    <form method="post" action="/projects/<%= project.id %>/tasks" class="card stack">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label>Título <input name="title" required></label>
+      <label>Descripción <textarea name="description" rows="2"></textarea></label>
+      <label>Asignar a
+        <select name="assignee_id">
+          <option value="">Sin asignar</option>
+          <% members.forEach(m => { %><option value="<%= m.id %>"><%= m.name %></option><% }) %>
+        </select>
+      </label>
+      <label>Fecha límite <input type="date" name="due_date"></label>
+      <button class="btn">Crear tarea</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Equipo</h2>
+    <div class="card">
+      <ul class="plain">
+        <% members.forEach(m => { %>
+          <li>
+            <%= m.name %> <small class="muted"><%= m.email %></small>
+            <% if (m.id === project.owner_id) { %><span class="badge">propietario</span>
+            <% } else if (project.isOwner) { %>
+              <form method="post" action="/projects/<%= project.id %>/members/<%= m.id %>/remove" class="inline">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button class="btn btn-small btn-ghost">Quitar</button>
+              </form>
+            <% } %>
+          </li>
+        <% }) %>
+      </ul>
+      <% if (project.isOwner) { %>
+        <form method="post" action="/projects/<%= project.id %>/members" class="stack">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+          <label>Añadir miembro por correo <input type="email" name="email" required></label>
+          <button class="btn">Añadir</button>
+        </form>
+      <% } %>
+    </div>
+    <% if (project.isOwner) { %>
+      <form method="post" action="/projects/<%= project.id %>/delete" onsubmit="return confirm('¿Eliminar el proyecto y todas sus tareas?')">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button class="btn btn-danger">Eliminar proyecto</button>
+      </form>
+    <% } %>
+  </section>
+</div>
+<%- include('../partials/footer') %>

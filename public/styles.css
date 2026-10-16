@@ -1,0 +1,35 @@
+:root {
+  --bg: #f4f5f7; --surface: #fff; --text: #172b4d; --muted: #6b778c;
+  --primary: #3b5bdb; --danger: #c92a2a; --border: #dfe1e6;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #14161a; --surface: #1d2026; --text: #e6e8eb; --muted: #9aa3af; --primary: #748ffc; --border: #2d323b; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, sans-serif; }
+a { color: var(--primary); }
+.topbar { display: flex; justify-content: space-between; align-items: center; padding: .75rem 1rem; background: var(--surface); border-bottom: 1px solid var(--border); }
+.brand { font-weight: 700; text-decoration: none; }
+.container { max-width: 1100px; margin: 0 auto; padding: 1rem; }
+.narrow { max-width: 420px; margin: 2rem auto; }
+.card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin: 0 0 .75rem; text-decoration: none; color: inherit; }
+.stack { display: flex; flex-direction: column; gap: .75rem; }
+.stack label { display: flex; flex-direction: column; gap: .25rem; font-size: .9rem; }
+input, select, textarea { font: inherit; padding: .5rem; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); }
+.btn { font: inherit; padding: .5rem .9rem; border: 0; border-radius: 6px; background: var(--primary); color: #fff; cursor: pointer; }
+.btn-small { padding: .15rem .5rem; font-size: .8rem; }
+.btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+.btn-danger { background: var(--danger); }
+.inline { display: inline-flex; gap: .4rem; align-items: center; flex-wrap: wrap; }
+.muted { color: var(--muted); }
+.alert { background: #ffe3e3; color: #a61e1e; padding: .5rem .75rem; border-radius: 6px; }
+.grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+.board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1rem 0; }
+.column { background: var(--bg); }
+.task { display: flex; flex-direction: column; gap: .35rem; }
+.badge { background: var(--border); border-radius: 99px; padding: 0 .5rem; font-size: .75rem; font-weight: 400; }
+.project-card { display: flex; flex-direction: column; gap: .25rem; }
+progress { width: 100%; height: .6rem; }
+.plain { list-style: none; padding: 0; margin: 0 0 1rem; display: flex; flex-direction: column; gap: .5rem; }
+.pre { white-space: pre-wrap; margin: .25rem 0 0; }
+@media (max-width: 760px) { .grid-2, .board { grid-template-columns: 1fr; } }

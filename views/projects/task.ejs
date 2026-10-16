@@ -1,0 +1,52 @@
+<%- include('../partials/header') %>
+<p><a href="/projects/<%= project.id %>">&larr; <%= project.name %></a></p>
+<h1><%= task.title %></h1>
+
+<div class="grid-2">
+  <section>
+    <h2>Detalles</h2>
+    <form method="post" action="/projects/<%= project.id %>/tasks/<%= task.id %>" class="card stack">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label>Título <input name="title" value="<%= task.title %>" required></label>
+      <label>Descripción <textarea name="description" rows="4"><%= task.description %></textarea></label>
+      <label>Estado
+        <select name="status">
+          <% Object.entries(STATUSES).forEach(([k, l]) => { %>
+            <option value="<%= k %>" <%= task.status === k ? 'selected' : '' %>><%= l %></option>
+          <% }) %>
+        </select>
+      </label>
+      <label>Asignada a
+        <select name="assignee_id">
+          <option value="">Sin asignar</option>
+          <% members.forEach(m => { %>
+            <option value="<%= m.id %>" <%= task.assignee_id === m.id ? 'selected' : '' %>><%= m.name %></option>
+          <% }) %>
+        </select>
+      </label>
+      <label>Fecha límite <input type="date" name="due_date" value="<%= task.due_date || '' %>"></label>
+      <button class="btn">Guardar cambios</button>
+    </form>
+    <form method="post" action="/projects/<%= project.id %>/tasks/<%= task.id %>/delete" onsubmit="return confirm('¿Eliminar esta tarea?')">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <button class="btn btn-danger">Eliminar tarea</button>
+    </form>
+  </section>
+
+  <section id="comments">
+    <h2>Comentarios</h2>
+    <% if (!comments.length) { %><p class="muted">Sin comentarios todavía.</p><% } %>
+    <% comments.forEach(c => { %>
+      <div class="card">
+        <strong><%= c.author %></strong> <small class="muted"><%= c.created_at %> UTC</small>
+        <p class="pre"><%= c.body %></p>
+      </div>
+    <% }) %>
+    <form method="post" action="/projects/<%= project.id %>/tasks/<%= task.id %>/comments" class="card stack">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label>Escribe un comentario <textarea name="body" rows="3" required></textarea></label>
+      <button class="btn">Comentar</button>
+    </form>
+  </section>
+</div>
+<%- include('../partials/footer') %>

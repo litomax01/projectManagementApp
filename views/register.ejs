@@ -1,0 +1,14 @@
+<%- include('partials/header') %>
+<section class="card narrow">
+  <h1>Crear cuenta</h1>
+  <% if (error) { %><p class="alert"><%= error %></p><% } %>
+  <form method="post" action="/register" class="stack">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <label>Nombre <input name="name" value="<%= form.name || '' %>" required autofocus></label>
+    <label>Correo <input type="email" name="email" value="<%= form.email || '' %>" required></label>
+    <label>Contraseña (mín. 8 caracteres) <input type="password" name="password" minlength="8" required></label>
+    <button class="btn">Registrarme</button>
+  </form>
+  <p class="muted">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+</section>
+<%- include('partials/footer') %>

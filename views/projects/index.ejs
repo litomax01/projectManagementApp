@@ -1,0 +1,35 @@
+<%- include('../partials/header') %>
+<div class="grid-2">
+  <section>
+    <h1>Mis proyectos</h1>
+    <% if (!projects.length) { %><p class="muted">Aún no tienes proyectos. Crea el primero.</p><% } %>
+    <% projects.forEach(p => { %>
+      <a class="card project-card" href="/projects/<%= p.id %>">
+        <strong><%= p.name %></strong>
+        <span class="muted"><%= p.description %></span>
+        <progress max="<%= p.total || 1 %>" value="<%= p.done %>"></progress>
+        <small class="muted"><%= p.done %> / <%= p.total %> tareas hechas</small>
+      </a>
+    <% }) %>
+
+    <h2>Nuevo proyecto</h2>
+    <form method="post" action="/projects" class="card stack">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label>Nombre <input name="name" required></label>
+      <label>Descripción <textarea name="description" rows="2"></textarea></label>
+      <button class="btn">Crear proyecto</button>
+    </form>
+  </section>
+
+  <aside>
+    <h2>Mis tareas pendientes</h2>
+    <% if (!myTasks.length) { %><p class="muted">No tienes tareas asignadas.</p><% } %>
+    <% myTasks.forEach(t => { %>
+      <a class="card task-mini" href="/projects/<%= t.project_id %>/tasks/<%= t.id %>">
+        <strong><%= t.title %></strong>
+        <small class="muted"><%= t.project_name %> · <%= STATUSES[t.status] %><%= t.due_date ? ' · vence ' + t.due_date : '' %></small>
+      </a>
+    <% }) %>
+  </aside>
+</div>
+<%- include('../partials/footer') %>

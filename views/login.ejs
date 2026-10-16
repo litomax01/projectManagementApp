@@ -1,0 +1,13 @@
+<%- include('partials/header') %>
+<section class="card narrow">
+  <h1>Iniciar sesión</h1>
+  <% if (error) { %><p class="alert"><%= error %></p><% } %>
+  <form method="post" action="/login" class="stack">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <label>Correo <input type="email" name="email" value="<%= email %>" required autofocus></label>
+    <label>Contraseña <input type="password" name="password" required></label>
+    <button class="btn">Entrar</button>
+  </form>
+  <p class="muted">¿No tienes cuenta? <a href="/register">Regístrate</a></p>
+</section>
+<%- include('partials/footer') %>
